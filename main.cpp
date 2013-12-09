@@ -1,3 +1,6 @@
+//ChoreBoard
+//By Charlie Carlson
+
 #include "mainwindow.h"
 #include <QApplication>
 
