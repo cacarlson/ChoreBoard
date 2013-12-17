@@ -3,15 +3,19 @@
 
 #include <QListWidgetItem>
 #include <ctime>
+#include <memory>
 
 class Task : public QListWidgetItem
 {
+
 public:
+    typedef std::shared_ptr<Task> task_ptr;
+
     explicit Task(QListWidget *parent = 0);
 
     std::string getDueDate();
     void setDueDate(unsigned int d_month = 1, unsigned int d_day = 1, unsigned int d_hour = 0, unsigned int d_min = 0);
-    std::string toString();
+    QString toString();
     void startTime();
     void stopTimer();
 
@@ -34,9 +38,10 @@ public:
     unsigned int hours_worked;
     unsigned int mins_worked;
 
-    Task* pre_task;
+    task_ptr pre_task;
     std::map<std::string, std::string> custome_fields;
 
 };
+
 
 #endif // TASK_H

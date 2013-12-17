@@ -20,7 +20,7 @@ std::string Task::getDueDate()
     return ret_value.str();
 }
 
-std::string Task::toString()
+QString Task::toString()
 {
     std::stringstream out_stream;
 
@@ -45,10 +45,10 @@ std::string Task::toString()
 
     for(auto iter = custome_fields.begin(); iter != custome_fields.end(); iter++)
     {
-        out_stream << iter->first << " " << iter->second << "\n";
+        out_stream << iter->first << ": " << iter->second << "\n";
     }
 
-    return out_stream.str();
+    return QString::fromStdString(out_stream.str());;
 }
 
 void Task::startTime()
