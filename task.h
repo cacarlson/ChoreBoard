@@ -2,6 +2,7 @@
 #define TASK_H
 
 #include <QListWidgetItem>
+#include <ctime>
 
 class Task : public QListWidgetItem
 {
@@ -15,9 +16,12 @@ public:
     void stopTimer();
 
     std::string task_name;
+    std::string project_name;
     std::string description;
 
     bool archived;
+
+    std::clock_t begin_time;
 
     unsigned int due_day;
     unsigned int due_month;
