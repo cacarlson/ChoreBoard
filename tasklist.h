@@ -2,10 +2,12 @@
 #define TASKLIST_H
 
 #include <QListWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <Task.h>
 #include <string>
 
-class TaskList : public QListWidget
+class TaskList : public QTreeWidget
 {
     Q_OBJECT
 public:
@@ -14,7 +16,7 @@ public:
     unsigned int num_active;
     unsigned int num_archived;
 
-    Task* top_task;
+    QTreeWidgetItem* top_task;
 
     //No need to implement add, remove, archive as they are handled by listwidget
     QString toString();

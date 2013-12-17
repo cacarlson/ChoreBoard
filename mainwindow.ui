@@ -318,6 +318,42 @@
      </property>
     </item>
    </widget>
+   <widget class="QTreeWidget" name="treeWidget">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>30</y>
+      <width>531</width>
+      <height>192</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>Name</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>New Column</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Time Worked</string>
+     </property>
+    </column>
+    <item>
+     <property name="text">
+      <string>Oh Yeah</string>
+     </property>
+     <property name="text">
+      <string>This Works</string>
+     </property>
+     <property name="text">
+      <string>I think...</string>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

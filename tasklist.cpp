@@ -7,7 +7,7 @@
 #include "Task.h"
 
 TaskList::TaskList(QWidget *parent) :
-    QListWidget(parent), num_active(0), num_archived(0), top_task(NULL)
+    QTreeWidget(parent), num_active(0), num_archived(0), top_task(NULL)
 {
     return;
 }
@@ -15,13 +15,11 @@ TaskList::TaskList(QWidget *parent) :
 QString TaskList::toString()
 {
     std::stringstream out_stream;
-    for(int ii = 0; ii < count(); ii++)
-    {
-        //Well....this is a little dangerous...
-        //However, this will only be called on this list, which will only hold
-        //items that are actually Task*....should probably write my own
-        //takeItem function
-        out_stream << ((Task*)item(ii))->toString().toStdString();
+
+    QTreeWidgetItemIterator it(this);
+    while (*it) {
+        out_stream << ((Task*)*it)->toString().toStdString();
+        ++it;
     }
 
     return QString::fromStdString(out_stream.str());
@@ -48,7 +46,7 @@ void TaskList::loadFromFile()
     while(!in_stream.atEnd())
     {
         Task* temp_task = new Task();
-        temp_task->setText( in_stream.readLine());
+        temp_task->setText(0,in_stream.readLine());
 
         int temp_bucket = 0;
         in_stream >> temp_bucket;
@@ -72,23 +70,20 @@ void TaskList::loadFromFile()
         in_stream.readLine();
         QString task_name("");
 
-        for(int jj = 0; jj < count(); jj++)
+        if(findItems(task_name,Qt::MatchExactly,0).size() > 0)
         {
-            if(!QString::compare(task_name, item(jj)->text(),Qt::CaseSensitive))
-            {
-                temp_task->pre_task = (Task*)item(jj);
-                break;
-            }
+            temp_task->pre_task = (Task*)(findItems(task_name,Qt::MatchExactly,0).first());
         }
 
         in_stream >> temp_bucket;
         in_stream.readLine();
+
         for(int hh = 0; hh < temp_bucket; hh++)
         {
             temp_task->custome_fields[in_stream.readLine().toStdString()] = in_stream.readLine().toStdString();
         }
 
-        addItem(temp_task);
+        addTopLevelItem(temp_task);
     }
 
     file.close();
@@ -96,5 +91,5 @@ void TaskList::loadFromFile()
 
 void TaskList::markTaskTop()
 {
-
+    top_task = currentItem();
 }

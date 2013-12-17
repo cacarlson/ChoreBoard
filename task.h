@@ -4,12 +4,13 @@
 #include <QListWidgetItem>
 #include <ctime>
 #include <memory>
+#include<QTreeWidgetItem>
 
-class Task : public QListWidgetItem
+class Task : public QTreeWidgetItem
 {
 
 public:
-    explicit Task(QListWidget *parent = 0);
+    explicit Task(QTreeWidget *parent = 0);
 
     std::string getDueDate();
     void setDueDate(unsigned int d_month = 1, unsigned int d_day = 1, unsigned int d_hour = 0, unsigned int d_min = 0);
