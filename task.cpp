@@ -45,7 +45,7 @@ QString Task::toString()
 
     for(auto iter = custome_fields.begin(); iter != custome_fields.end(); iter++)
     {
-        out_stream << iter->first << " " << iter->second << "\n";
+        out_stream << iter->first << "\n" << iter->second << "\n";
     }
 
     return QString::fromStdString(out_stream.str());;

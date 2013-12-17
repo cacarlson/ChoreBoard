@@ -1,5 +1,6 @@
 #include "tasklist.h"
 #include <iostream>
+#include <sstream>
 #include <QFile>
 #include <QCoreApplication>
 #include <QTextStream>
@@ -11,21 +12,30 @@ TaskList::TaskList(QWidget *parent) :
     return;
 }
 
-bool TaskList::saveToFile()
+QString TaskList::toString()
 {
-    QFile file("database.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream out_stream(&file);
-
+    std::stringstream out_stream;
     for(int ii = 0; ii < count(); ii++)
     {
         //Well....this is a little dangerous...
         //However, this will only be called on this list, which will only hold
         //items that are actually Task*....should probably write my own
         //takeItem function
-        out_stream << ((Task*)item(ii))->toString();
+        out_stream << ((Task*)item(ii))->toString().toStdString();
     }
 
+    return QString::fromStdString(out_stream.str());
+}
+
+bool TaskList::saveToFile()
+{
+    QFile file("database.txt");
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out_stream(&file);
+
+    out_stream << toString();
+
+    file.close();
     return true;
 }
 
@@ -40,14 +50,15 @@ void TaskList::loadFromFile()
         Task* temp_task = new Task();
         temp_task->setText( in_stream.readLine());
 
-        int temp_bool = 0;
-        in_stream >> temp_bool;
-        temp_task->archived = (bool)temp_bool;
+        int temp_bucket = 0;
+        in_stream >> temp_bucket;
+        temp_task->archived = (bool)temp_bucket;
 
         in_stream >> temp_task->due_month;
         in_stream >> temp_task->due_day;
         in_stream >> temp_task->due_hour;
         in_stream >> temp_task->due_min;
+        in_stream.readLine();
 
         temp_task->description = in_stream.readLine();
         temp_task->project_name = in_stream.readLine();
@@ -58,8 +69,8 @@ void TaskList::loadFromFile()
         in_stream >> temp_task->hours_worked;
         in_stream >> temp_task->mins_worked;
 
+        in_stream.readLine();
         QString task_name("");
-        task_name = in_stream.readLine();
 
         for(int jj = 0; jj < count(); jj++)
         {
@@ -70,7 +81,17 @@ void TaskList::loadFromFile()
             }
         }
 
+        in_stream >> temp_bucket;
+        in_stream.readLine();
+        for(int hh = 0; hh < temp_bucket; hh++)
+        {
+            temp_task->custome_fields[in_stream.readLine().toStdString()] = in_stream.readLine().toStdString();
+        }
+
+        addItem(temp_task);
     }
+
+    file.close();
 }
 
 void TaskList::markTaskTop()

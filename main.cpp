@@ -45,5 +45,12 @@ int main(int argc, char *argv[])
 
     my_list.saveToFile();
 
+    TaskList::TaskList my_task_list;
+
+    my_task_list.loadFromFile();
+
+    std::cout << "check if files where loaded and printed correctly...also saved I guess";
+    std::cout << my_task_list.toString().toStdString() << std::endl;
+
     return a.exec();
 }

@@ -17,13 +17,12 @@ public:
     Task* top_task;
 
     //No need to implement add, remove, archive as they are handled by listwidget
+    QString toString();
 
     bool saveToFile();
     void loadFromFile();
 
     void markTaskTop();
-
-
 
 signals:
 
