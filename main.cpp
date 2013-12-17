@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 
     //A little TDD or just unit testing
     Task* my_task = new Task();
-    my_task->task_name = "Charlie's Test Task";
+    my_task->setText("Charlie's Test Task");
     my_task->archived = true;
     my_task->description = "An example task to make sure that the toString function is working";
     my_task->project_name = "CS 471";
@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
 
     //add a few more and check
     Task* a_task = new Task(*my_task);
-    a_task->task_name = "not that task";
+    a_task->setText("not that task");
     Task* b_task = new Task(*my_task);
-    b_task->task_name = "different yet again";
+    b_task->setText( "different yet again");
 
     my_list.addItem(a_task);
     my_list.addItem(b_task);

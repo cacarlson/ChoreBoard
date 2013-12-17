@@ -14,7 +14,7 @@ public:
     unsigned int num_active;
     unsigned int num_archived;
 
-    Task::task_ptr top_task;
+    Task* top_task;
 
     //No need to implement add, remove, archive as they are handled by listwidget
 

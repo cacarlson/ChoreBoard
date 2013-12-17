@@ -9,8 +9,6 @@ class Task : public QListWidgetItem
 {
 
 public:
-    typedef std::shared_ptr<Task> task_ptr;
-
     explicit Task(QListWidget *parent = 0);
 
     std::string getDueDate();
@@ -19,9 +17,8 @@ public:
     void startTime();
     void stopTimer();
 
-    std::string task_name;
-    std::string project_name;
-    std::string description;
+    QString project_name;
+    QString description;
 
     bool archived;
 
@@ -38,7 +35,7 @@ public:
     unsigned int hours_worked;
     unsigned int mins_worked;
 
-    task_ptr pre_task;
+    Task* pre_task;
     std::map<std::string, std::string> custome_fields;
 
 };
