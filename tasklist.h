@@ -1,21 +1,22 @@
 #ifndef TASKLIST_H
 #define TASKLIST_H
 
+#include <ui_mainwindow.h>
 #include <QListWidget>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <Task.h>
 #include <string>
 
-class TaskList : public QTreeWidget
+class TaskList
 {
-    Q_OBJECT
 public:
-    explicit TaskList(QWidget *parent = 0);
+    explicit TaskList(Ui::MainWindow *ui, QTreeWidget * m_tree);
 
     unsigned int num_active;
     unsigned int num_archived;
 
+    QTreeWidget* task_list;
     QTreeWidgetItem* top_task;
 
     //No need to implement add, remove, archive as they are handled by listwidget
@@ -25,6 +26,9 @@ public:
     void loadFromFile();
 
     void markTaskTop();
+
+private:
+    Ui::MainWindow *myUi;
 
 signals:
 

@@ -27,12 +27,10 @@ int main(int argc, char *argv[])
 
     std::cout << my_task->toString().toStdString() << std::endl;
 
-    TaskList::TaskList my_list;
-
-    my_list.addTopLevelItem(my_task);
+    w.m_taskList->task_list->addTopLevelItem(my_task);
 
     //check saving list of one
-    my_list.saveToFile();
+    w.m_taskList->saveToFile();
 
     std::cout << " file saved" << std::endl;
     //add a few more and check
@@ -41,17 +39,20 @@ int main(int argc, char *argv[])
     Task* b_task = new Task(*my_task);
     b_task->setText(0, "different yet again");
 
-    my_list.addTopLevelItem(a_task);
-    my_list.addTopLevelItem(b_task);
+    std::cout << "It is going to add some tasks" << std::endl;
 
-    my_list.saveToFile();
+     w.m_taskList->task_list->addTopLevelItem(a_task);
+     w.m_taskList->task_list->addTopLevelItem(b_task);
 
-    TaskList::TaskList my_task_list;
+    std::cout << "It is going to save" << std::endl;
+     w.m_taskList->saveToFile();
 
-    my_task_list.loadFromFile();
+     QTreeWidget* m_tree = new QTreeWidget;
+     TaskList* other_list = new TaskList(NULL, m_tree);
+    other_list->loadFromFile();
 
     std::cout << "check if files where loaded and printed correctly...also saved I guess";
-    std::cout << my_task_list.toString().toStdString() << std::endl;
+    std::cout << other_list->toString().toStdString() << std::endl;
 
     return a.exec();
 }

@@ -6,9 +6,11 @@
 #include <QTextStream>
 #include "Task.h"
 
-TaskList::TaskList(QWidget *parent) :
-    QTreeWidget(parent), num_active(0), num_archived(0), top_task(NULL)
+TaskList::TaskList(Ui::MainWindow *ui, QTreeWidget* m_tree) :
+    num_active(0), num_archived(0), top_task(NULL)
 {
+    task_list = m_tree;
+    myUi = ui;
     return;
 }
 
@@ -16,7 +18,7 @@ QString TaskList::toString()
 {
     std::stringstream out_stream;
 
-    QTreeWidgetItemIterator it(this);
+    QTreeWidgetItemIterator it(task_list);
     while (*it) {
         out_stream << ((Task*)*it)->toString().toStdString();
         ++it;
@@ -70,9 +72,9 @@ void TaskList::loadFromFile()
         in_stream.readLine();
         QString task_name("");
 
-        if(findItems(task_name,Qt::MatchExactly,0).size() > 0)
+        if(task_list->findItems(task_name,Qt::MatchExactly,0).size() > 0)
         {
-            temp_task->pre_task = (Task*)(findItems(task_name,Qt::MatchExactly,0).first());
+            temp_task->pre_task = (Task*)(task_list->findItems(task_name,Qt::MatchExactly,0).first());
         }
 
         in_stream >> temp_bucket;
@@ -83,7 +85,7 @@ void TaskList::loadFromFile()
             temp_task->custome_fields[in_stream.readLine().toStdString()] = in_stream.readLine().toStdString();
         }
 
-        addTopLevelItem(temp_task);
+        task_list->addTopLevelItem(temp_task);
     }
 
     file.close();
@@ -91,5 +93,5 @@ void TaskList::loadFromFile()
 
 void TaskList::markTaskTop()
 {
-    top_task = currentItem();
+    top_task = task_list->currentItem();
 }
