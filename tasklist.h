@@ -11,13 +11,13 @@
 class TaskList
 {
 public:
-    explicit TaskList(Ui::MainWindow *ui, QTreeWidget * m_tree);
+    explicit TaskList(QTreeWidget * m_tree);
 
     unsigned int num_active;
     unsigned int num_archived;
 
     QTreeWidget* task_list;
-    QTreeWidgetItem* top_task;
+    Task* top_task;
 
     QString toString();
 
@@ -27,7 +27,6 @@ public:
     void markTaskTop();
 
 private:
-    Ui::MainWindow *myUi;
 
 signals:
 

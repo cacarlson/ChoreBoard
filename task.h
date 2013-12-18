@@ -13,6 +13,7 @@ class Task : public QTreeWidgetItem
 public:
     explicit Task();
 
+    void colorRow(QColor color, unsigned int numbCols = 2);
     void addWorkTime(time_t secs = 0);
     void setDueDate(unsigned int d_year = 1, unsigned int d_month = 1, unsigned int d_day = 1, unsigned int d_hour = 0, unsigned int d_min = 0);
 
@@ -27,6 +28,7 @@ public:
     QString description;
 
     bool archived;
+    bool begin_work;
 
     std::clock_t begin_time;
 

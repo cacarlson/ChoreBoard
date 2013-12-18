@@ -27,7 +27,7 @@
      <string>MoveUp</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="MoveUp_2">
+   <widget class="QPushButton" name="MoveDown">
     <property name="geometry">
      <rect>
       <x>740</x>
@@ -38,22 +38,6 @@
     </property>
     <property name="text">
      <string>Move Down</string>
-    </property>
-   </widget>
-   <widget class="QLCDNumber" name="lcdNumber">
-    <property name="geometry">
-     <rect>
-      <x>720</x>
-      <y>10</y>
-      <width>151</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="value" stdset="0">
-     <double>0.000000000000000</double>
-    </property>
-    <property name="intValue" stdset="0">
-     <number>0</number>
     </property>
    </widget>
    <widget class="QPushButton" name="CreateTask">
@@ -72,7 +56,7 @@
    <widget class="QPushButton" name="DeleteTask">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>310</x>
       <y>320</y>
       <width>121</width>
       <height>41</height>
@@ -119,19 +103,6 @@
     </property>
     <property name="text">
      <string>Make Top</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="Archive">
-    <property name="geometry">
-     <rect>
-      <x>740</x>
-      <y>180</y>
-      <width>115</width>
-      <height>32</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Archive</string>
     </property>
    </widget>
    <widget class="QTreeWidget" name="dataTable">
@@ -227,7 +198,7 @@
      </property>
     </column>
    </widget>
-   <widget class="QTextBrowser" name="textBrowser">
+   <widget class="QPlainTextEdit" name="description">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -248,6 +219,16 @@
     </property>
     <property name="text">
      <string>Description:</string>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lcdNumber">
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>10</y>
+      <width>151</width>
+      <height>71</height>
+     </rect>
     </property>
    </widget>
   </widget>

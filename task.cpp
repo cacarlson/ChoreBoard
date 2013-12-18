@@ -6,10 +6,16 @@
 #include <iostream>
 
 Task::Task() :
-    QTreeWidgetItem(), project_name(""), description(""), archived(false), due_date(), work_done(0,0,0,0), time_worked(0), time_estimated(0), pre_task(NULL), custome_fields()
+    QTreeWidgetItem(), project_name(""), description(""), archived(false), begin_work(false), due_date(), work_done(0,0,0,0), time_worked(0), time_estimated(0), pre_task(NULL), custome_fields()
 {
     setFlags(flags() & ~Qt::ItemIsDropEnabled);
     return;
+}
+
+void Task::colorRow(QColor color, unsigned int numbCols)
+{
+    for(unsigned int ii = 0; ii <= numbCols; ii++)
+        setBackgroundColor(ii,color);
 }
 
 void Task::setDueDate(unsigned int d_year, unsigned int d_month, unsigned int d_day, unsigned int d_hour, unsigned int d_min)
@@ -84,12 +90,4 @@ QString Task::toString()
     return QString::fromStdString(out_stream.str());;
 }
 
-void Task::startTime()
-{
-    work_done.start();
-}
 
-void Task::stopTimer()
-{
-   time_worked += work_done.elapsed();
-}

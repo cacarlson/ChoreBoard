@@ -6,11 +6,10 @@
 #include <QTextStream>
 #include "Task.h"
 
-TaskList::TaskList(Ui::MainWindow *ui, QTreeWidget* m_tree) :
+TaskList::TaskList(QTreeWidget* m_tree) :
     num_active(0), num_archived(0), top_task(NULL)
 {
     task_list = m_tree;
-    myUi = ui;
     return;
 }
 
@@ -54,6 +53,11 @@ void TaskList::loadFromFile()
         in_stream >> temp_bucket;
         temp_task->archived = (bool)temp_bucket;
 
+        if(temp_task->archived)
+            temp_task->colorRow(Qt::cyan, 2);
+        else
+           temp_task->colorRow(Qt::transparent, 2);
+
         unsigned int due[5];
         in_stream >> due[0];
         in_stream >> due[1];
@@ -91,10 +95,26 @@ void TaskList::loadFromFile()
         task_list->addTopLevelItem(temp_task);
     }
 
+    task_list->resizeColumnToContents(0);
+    task_list->resizeColumnToContents(1);
+    task_list->resizeColumnToContents(2);
     file.close();
 }
 
 void TaskList::markTaskTop()
 {
-    top_task = task_list->currentItem();
+    Task* old_task = top_task;
+
+    top_task = (Task*)task_list->currentItem();
+
+    if(top_task != NULL)
+        top_task->colorRow(Qt::red);
+
+    if(old_task != NULL)
+    {
+        if(old_task->archived)
+            old_task->colorRow(Qt::cyan);
+        else
+            old_task->colorRow(Qt::transparent);
+    }
 }
