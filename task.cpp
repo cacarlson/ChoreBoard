@@ -8,8 +8,6 @@
 Task::Task() :
     QTreeWidgetItem(), project_name(""), description(""), archived(false), due_date(), work_done(0,0,0,0), time_worked(0), time_estimated(0), pre_task(NULL), custome_fields()
 {
-    setText(0, "");
-    setText(1, "01/01/01 00:00");
     setFlags(flags() & ~Qt::ItemIsDropEnabled);
     return;
 }
@@ -19,12 +17,40 @@ void Task::setDueDate(unsigned int d_year, unsigned int d_month, unsigned int d_
     due_date.setTime(QTime(d_hour, d_min));
     due_date.setDate(QDate(d_year, d_month, d_day));
 
-    setText(1, due_date.toString("MM/dd/yy"));
+    setText(1, due_date.toString("MM/dd/yy HH:mm"));
 }
 
-void Task::addWorkTime(unsigned int secs)
+QString Task::workedToString()
+{
+    int duration = time_worked;
+    QString res;
+    int seconds = (int) (duration % 60);
+    duration /= 60;
+    int minutes = (int) (duration % 60);
+    duration /= 60;
+    int hours = (int) (duration % 24);
+
+    return res.sprintf("%02d:%02d:%02d", hours, minutes, seconds);
+}
+
+QString Task::estToString()
+{
+    int duration = time_estimated;
+    QString res;
+    int seconds = (int) (duration % 60);
+    duration /= 60;
+    int minutes = (int) (duration % 60);
+    duration /= 60;
+    int hours = (int) (duration % 24);
+
+    return res.sprintf("%02d:%02d:%02d", hours, minutes, seconds);
+}
+
+void Task::addWorkTime(time_t secs)
 {
     time_worked += secs;
+
+    setText(2, workedToString());
 }
 
 QString Task::toString()

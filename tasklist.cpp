@@ -68,6 +68,7 @@ void TaskList::loadFromFile()
         temp_task->project_name = in_stream.readLine();
 
         in_stream >> temp_task->time_worked;
+        temp_task->addWorkTime(0);
 
         in_stream >> temp_task->time_estimated;
 

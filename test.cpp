@@ -48,6 +48,7 @@ void Tester::test_me(MainWindow &w)
     a_task->setText(0,"Task A");
     Task* b_task = new Task(*my_task);
     b_task->setText(0, "Task B");
+    b_task->archived = false;
 
     w.m_taskList->task_list->addTopLevelItem(a_task);
     w.m_taskList->task_list->addTopLevelItem(b_task);

@@ -19,7 +19,6 @@ public:
     QTreeWidget* task_list;
     QTreeWidgetItem* top_task;
 
-    //No need to implement add, remove, archive as they are handled by listwidget
     QString toString();
 
     bool saveToFile();
