@@ -63,6 +63,33 @@ void Tester::test_me(MainWindow &w)
     test_res = w.m_taskList->task_list->topLevelItemCount() == 8;
     tests.push_back(test("Save and Load Test Two: ", test_res));
 
+    //clear all tasks
+
+    w.m_taskList->task_list->clear();
+
+    test_res = test_res = w.m_taskList->task_list->topLevelItemCount() == 0;
+    tests.push_back(test("Remove Tasks all: ",test_res));
+
+    //stress on objects
+    for(int ii = 0; ii < 1000; ii++)
+    {
+        Task* task = new Task();
+        task->setText(0,QString(QString::number(ii)+" task"));
+        w.m_taskList->task_list->addTopLevelItem(task);
+    }
+
+    test_res = test_res = w.m_taskList->task_list->topLevelItemCount() == 1000;
+    tests.push_back(test("Add Tasks: ",test_res));
+
+    w.m_taskList->saveToFile();
+
+    w.m_taskList->task_list->clear();
+
+    w.m_taskList->loadFromFile();
+
+    test_res = test_res = w.m_taskList->task_list->topLevelItemCount() == 1000;
+    tests.push_back(test("Add Load and Save 1000 tasks: ",test_res));
+
     for(auto ii : tests)
     {
         std::cout << ii.first;

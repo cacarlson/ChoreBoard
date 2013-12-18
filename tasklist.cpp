@@ -44,12 +44,16 @@ void TaskList::loadFromFile()
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream in_stream(&file);
 
+    int temp_bucket = 0;
     while(!in_stream.atEnd())
     {
+        temp_bucket = 0;
+
+        //read name
         Task* temp_task = new Task();
         temp_task->setText(0,in_stream.readLine());
 
-        int temp_bucket = 0;
+        //read archived
         in_stream >> temp_bucket;
         temp_task->archived = (bool)temp_bucket;
 
@@ -58,7 +62,9 @@ void TaskList::loadFromFile()
         else
            temp_task->colorRow(Qt::transparent, 2);
 
+        //read due date detials
         unsigned int due[5];
+
         in_stream >> due[0];
         in_stream >> due[1];
         in_stream >> due[2];
@@ -68,29 +74,40 @@ void TaskList::loadFromFile()
         temp_task->setDueDate(due[0], due[1], due[2], due[3], due[4]);
         in_stream.readLine();
 
+        //read in description
         temp_task->description = in_stream.readLine();
+
+        //read in project name
         temp_task->project_name = in_stream.readLine();
 
+        //read in seconds worked
         in_stream >> temp_task->time_worked;
         temp_task->addWorkTime(0);
-
-        in_stream >> temp_task->time_estimated;
-
         in_stream.readLine();
-        QString task_name("");
 
-        if(task_list->findItems(task_name,Qt::MatchExactly,0).size() > 0)
+        //read in seconds estimated
+        in_stream >> temp_task->time_estimated;
+        in_stream.readLine();
+        //read in pre-req task
+        QString pre_req_task("");
+        pre_req_task = in_stream.readLine();
+
+        if(task_list->findItems(pre_req_task,Qt::MatchExactly,0).size() > 0)
         {
-            temp_task->pre_task = (Task*)(task_list->findItems(task_name,Qt::MatchExactly,0).first());
+            temp_task->pre_task = (Task*)(task_list->findItems(pre_req_task,Qt::MatchExactly,0).first());
         }
 
+        //read in number of custom fields
         in_stream >> temp_bucket;
         in_stream.readLine();
+        if(temp_bucket > 0)
+            for(int hh = 0; hh < temp_bucket; hh++)
+            {
+                temp_task->custome_fields[in_stream.readLine().toStdString()] = in_stream.readLine().toStdString();
+            }
+        else
+            in_stream.readLine();
 
-        for(int hh = 0; hh < temp_bucket; hh++)
-        {
-            temp_task->custome_fields[in_stream.readLine().toStdString()] = in_stream.readLine().toStdString();
-        }
 
         task_list->addTopLevelItem(temp_task);
     }
@@ -98,6 +115,7 @@ void TaskList::loadFromFile()
     task_list->resizeColumnToContents(0);
     task_list->resizeColumnToContents(1);
     task_list->resizeColumnToContents(2);
+
     file.close();
 }
 

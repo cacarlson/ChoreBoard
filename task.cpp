@@ -6,7 +6,7 @@
 #include <iostream>
 
 Task::Task() :
-    QTreeWidgetItem(), project_name(""), description(""), archived(false), begin_work(false), due_date(), work_done(0,0,0,0), time_worked(0), time_estimated(0), pre_task(NULL), custome_fields()
+    QTreeWidgetItem(), project_name(""), description(""), archived(false), begin_work(false), due_date(QDateTime::currentDateTime()), work_done(0,0,0,0), time_worked(0), time_estimated(0), pre_task(NULL), custome_fields()
 {
     setFlags(flags() & ~Qt::ItemIsDropEnabled);
     return;
@@ -80,12 +80,14 @@ QString Task::toString()
         out_stream << "\n";
     }
 
-    out_stream << custome_fields.size() << "\n";
+    out_stream << custome_fields.size() << std::endl;
 
-    for(auto iter = custome_fields.begin(); iter != custome_fields.end(); iter++)
-    {
-        out_stream << iter->first << "\n" << iter->second << "\n";
-    }
+    if(custome_fields.size() > 0)
+        for(auto iter = custome_fields.begin(); iter != custome_fields.end(); iter++)
+        {
+            out_stream << iter->first << "\n" << iter->second << "\n";
+        }
+
 
     return QString::fromStdString(out_stream.str());;
 }

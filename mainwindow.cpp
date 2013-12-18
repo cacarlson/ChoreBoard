@@ -17,8 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_combobox = new QComboBox(ui->taskList);
     m_timer = new QTimer();
     m_begin_work = false;
-    m_begin_time = QTime(0, 0, 0, 0);
-    m_end_time = QTime();
+    m_work_seconds = 0;
 
     Name = new QTreeWidgetItem();
     Archived = new QTreeWidgetItem();
@@ -74,10 +73,21 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::UpdateCounter()
 {
     QTime time = QTime::QTime::currentTime();
-    QString text = m_begin_time.toString("HH:mm");
+    QString text;
+    if(m_taskList->top_task != NULL && m_begin_work)
+        text = QDateTime::fromTime_t(m_taskList->top_task->time_worked).toString("mm:ss");
+    else
+        text = QDateTime::fromTime_t(0).toString("mm:ss");
     if ((time.second() % 2) == 0)
         text[2] = ' ';
     ui->lcdNumber->display(text);
+    if(m_taskList->top_task != NULL && m_begin_work)
+    {
+        m_taskList->top_task->addWorkTime(1);
+        m_taskList->top_task->setText(2, m_taskList->top_task->workedToString());
+        m_taskList->top_task->colorRow(Qt::red,2);
+        TimeWorked->setText(1,m_taskList->top_task->workedToString());
+    }
 }
 
 void MainWindow::TaskListItemChanged()
@@ -216,7 +226,6 @@ void MainWindow::StartTimer()
     if(m_taskList->top_task != NULL && m_begin_work == false)
     {
         m_begin_work = true;
-        m_begin_time.start();
     }
 }
 
@@ -225,11 +234,7 @@ void MainWindow::StopTimer()
     if(m_taskList->top_task != NULL && m_begin_work == true)
     {
         m_begin_work = false;
-        m_taskList->top_task->addWorkTime(m_begin_time.elapsed()/1000);
-        m_begin_time.restart();
     }
-    else if(m_taskList->top_task != NULL)
-        m_taskList->top_task->setText(2, m_taskList->top_task->workedToString());
 }
 
 MainWindow::~MainWindow()

@@ -29,11 +29,10 @@ public:
     Task *m_currentTask;
     QComboBox *m_combobox;
     bool m_begin_work;
+    time_t m_work_seconds;
 
     QTimer * m_timer;
 
-    QTime m_begin_time;
-    QTime m_end_time;
 
     ~MainWindow();
 
