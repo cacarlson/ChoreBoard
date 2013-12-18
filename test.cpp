@@ -20,13 +20,13 @@ void Tester::test_me(MainWindow &w)
     my_task->archived = true;
     my_task->description = "An example task to make sure that the toString function is working";
     my_task->project_name = "CS 471";
-    my_task->hours_estimated = 2;
-    my_task->mins_estimated = 0;
-    my_task->hours_worked = 0;
-    my_task->mins_worked = 30;
+    my_task->setDueDate(1,1,1,1,1);
+    my_task->addWorkTime(900);
+    my_task->time_estimated = 10000;
     my_task->custome_fields["awesomenss"] = "somewhat";
 
-    bool test_res = my_task->toString().toStdString() == "1Charlie's Test Task\n1\n0 0 0 0\nAn example task to make sure that the toString function is working\nCS 471\n2 0\n0 30\n\n1\nawesomenss\nsomewhat\n";
+    std::cout << my_task->toString().toStdString() << std::endl;
+    bool test_res = my_task->toString().toStdString() == "Charlie's Test Task\n1\n01 1 1 1 1\nAn example task to make sure that the toString function is working\nCS 471\n900\n10000\n\n1\nawesomenss\nsomewhat\n";
     tests.push_back(test("Class Test One: ", test_res));
 
     //Check if added correctly

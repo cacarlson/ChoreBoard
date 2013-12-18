@@ -3,23 +3,28 @@
 #include <math.h>
 #include <sstream>
 #include <ctime>
+#include <iostream>
 
 Task::Task() :
-    QTreeWidgetItem(), project_name(""), description(""), due_date(""), archived(false), begin_time(0), due_day(0), due_month(0), due_hour(0), due_min(0),  hours_estimated(0), hours_worked(0), mins_worked(0), pre_task(NULL), custome_fields()
+    QTreeWidgetItem(), project_name(""), description(""), archived(false), due_date(), work_done(0,0,0,0), time_worked(0), time_estimated(0), pre_task(NULL), custome_fields()
 {
+    setText(0, "");
+    setText(1, "01/01/01 00:00");
     setFlags(flags() & ~Qt::ItemIsDropEnabled);
     return;
 }
 
-//Returns string of due date in form
-// <due month> <due time> <due_hour> : <due_min>
-std::string Task::getDueDate()
+void Task::setDueDate(unsigned int d_year, unsigned int d_month, unsigned int d_day, unsigned int d_hour, unsigned int d_min)
 {
-    std::stringstream ret_value;
+    due_date.setTime(QTime(d_hour, d_min));
+    due_date.setDate(QDate(d_year, d_month, d_day));
 
-    ret_value << due_month << " " << due_day << " " << due_hour << ":" << due_min;
+    setText(1, due_date.toString("MM/dd/yy"));
+}
 
-    return ret_value.str();
+void Task::addWorkTime(unsigned int secs)
+{
+    time_worked += secs;
 }
 
 QString Task::toString()
@@ -28,11 +33,11 @@ QString Task::toString()
 
     out_stream << text(0).toStdString() << "\n";
     out_stream << archived << "\n";
-    out_stream << due_month << " " << due_day << " " << due_hour << " " << due_min << "\n";
+    out_stream << due_date.toString("yy M d h m").toStdString() + "\n";
     out_stream << description.toStdString() << "\n";
     out_stream << project_name.toStdString() << "\n";
-    out_stream << hours_estimated << " " << mins_estimated << "\n";
-    out_stream << hours_worked << " " << mins_worked << "\n";
+    out_stream << time_worked << "\n";
+    out_stream << time_estimated << "\n";
 
     if(pre_task != NULL)
     {
@@ -55,16 +60,10 @@ QString Task::toString()
 
 void Task::startTime()
 {
-    begin_time = std::clock();
+    work_done.start();
 }
 
 void Task::stopTimer()
 {
-    std::clock_t stop_time = std::clock();
-
-    unsigned int w_secs = double(stop_time - begin_time) / CLOCKS_PER_SEC;
-
-    hours_worked = (w_secs % 360) / 60;
-
-    hours_worked += w_secs / 360;
+   time_worked += work_done.elapsed();
 }

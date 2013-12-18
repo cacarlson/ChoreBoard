@@ -54,20 +54,22 @@ void TaskList::loadFromFile()
         in_stream >> temp_bucket;
         temp_task->archived = (bool)temp_bucket;
 
-        in_stream >> temp_task->due_month;
-        in_stream >> temp_task->due_day;
-        in_stream >> temp_task->due_hour;
-        in_stream >> temp_task->due_min;
+        unsigned int due[5];
+        in_stream >> due[0];
+        in_stream >> due[1];
+        in_stream >> due[2];
+        in_stream >> due[3];
+        in_stream >> due[4];
+
+        temp_task->setDueDate(due[0], due[1], due[2], due[3], due[4]);
         in_stream.readLine();
 
         temp_task->description = in_stream.readLine();
         temp_task->project_name = in_stream.readLine();
 
-        in_stream >> temp_task->hours_estimated;
-        in_stream >> temp_task->mins_estimated;
+        in_stream >> temp_task->time_worked;
 
-        in_stream >> temp_task->hours_worked;
-        in_stream >> temp_task->mins_worked;
+        in_stream >> temp_task->time_estimated;
 
         in_stream.readLine();
         QString task_name("");
