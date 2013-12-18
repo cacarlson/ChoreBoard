@@ -19,11 +19,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     task.cpp \
-    tasklist.cpp
+    tasklist.cpp \
+    test.cpp
 
 HEADERS  += mainwindow.h \
     task.h \
-    tasklist.h
+    tasklist.h \
+    test.h
 
 
 FORMS    += mainwindow.ui

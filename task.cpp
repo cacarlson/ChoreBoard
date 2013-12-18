@@ -4,9 +4,10 @@
 #include <sstream>
 #include <ctime>
 
-Task::Task(QTreeWidget * parent) :
-    QTreeWidgetItem(), project_name(""), description(""), archived(false), begin_time(0), due_day(0), due_month(0), due_hour(0), due_min(0),  hours_estimated(0), hours_worked(0), mins_worked(0), pre_task(NULL), custome_fields()
+Task::Task() :
+    QTreeWidgetItem(), project_name(""), description(""), due_date(""), archived(false), begin_time(0), due_day(0), due_month(0), due_hour(0), due_min(0),  hours_estimated(0), hours_worked(0), mins_worked(0), pre_task(NULL), custome_fields()
 {
+    setFlags(flags() & ~Qt::ItemIsDropEnabled);
     return;
 }
 

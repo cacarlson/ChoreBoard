@@ -10,16 +10,18 @@ class Task : public QTreeWidgetItem
 {
 
 public:
-    explicit Task(QTreeWidget *parent = 0);
+    explicit Task();
 
     std::string getDueDate();
     void setDueDate(unsigned int d_month = 1, unsigned int d_day = 1, unsigned int d_hour = 0, unsigned int d_min = 0);
+
     QString toString();
     void startTime();
     void stopTimer();
 
     QString project_name;
     QString description;
+    QString due_date;
 
     bool archived;
 
