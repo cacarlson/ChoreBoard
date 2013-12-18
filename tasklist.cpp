@@ -105,8 +105,6 @@ void TaskList::loadFromFile()
             {
                 temp_task->custome_fields[in_stream.readLine().toStdString()] = in_stream.readLine().toStdString();
             }
-        else
-            in_stream.readLine();
 
 
         task_list->addTopLevelItem(temp_task);
