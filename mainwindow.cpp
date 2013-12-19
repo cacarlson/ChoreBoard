@@ -116,10 +116,10 @@ void MainWindow::TaskListItemChanged()
 
         Pre_req->setText(0, "Pre-Req:");
 
-        if(m_task->pre_task != NULL)
+        /*if(m_task->pre_task != NULL)
             Pre_req->setText(1, m_task->pre_task->text(0));
-        else
-            Pre_req->setText(1, "None");
+        else*/
+        Pre_req->setText(1, "None");
 
         Archived->setText(0, "Archived:");
 
@@ -161,8 +161,8 @@ void MainWindow::DateUpdated(QTreeWidgetItem *, int col)
         m_stringList = TimeWorked->text(1).split(':');
         m_task->time_worked = m_stringList[0].toUInt(NULL,10)*3600 + m_stringList[1].toUInt(NULL,10)*60 + m_stringList[2].toUInt(NULL,10);
         m_task->setText(2, m_task->workedToString());
-        if(Pre_req->text(1) != "None")
-            m_task->pre_task = ((Task*)ui->taskList->findItems(Pre_req->text(1),Qt::MatchCaseSensitive, 0).first());
+        //if(Pre_req->text(1) != "None")
+        //    m_task->pre_task = ((Task*)ui->taskList->findItems(Pre_req->text(1),Qt::MatchCaseSensitive, 0).first());
     }
 
     m_taskList->saveToFile();
@@ -187,7 +187,7 @@ void MainWindow::CreateTask()
 
 void MainWindow::DeleteTask()
 {
-    if( ui->taskList->currentIndex().row() >= 0)
+    if( ui->taskList->currentIndex().row() >= 0 && ui->taskList->currentItem() != m_taskList->top_task)
         ui->taskList->takeTopLevelItem(ui->taskList->currentIndex().row());
 
     m_taskList->saveToFile();
@@ -239,7 +239,14 @@ void MainWindow::MoveUp()
 
 void MainWindow::MakeTop()
 {
-    m_taskList->markTaskTop();
+    if(m_taskList->task_list->currentItem() != m_taskList->top_task)
+        m_taskList->markTaskTop();
+    else
+    {
+        StopTimer();
+        m_taskList->top_task = NULL;
+        ((Task*)m_taskList->task_list->currentItem())->colorRow(Qt::transparent, 2);
+    }
 }
 
 void MainWindow::StartTimer()

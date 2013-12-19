@@ -33,9 +33,7 @@ void Tester::test_me(MainWindow &w)
     w.m_taskList->task_list->addTopLevelItem(my_task);
     test_res = w.m_taskList->task_list->topLevelItem(0)->text(0) == my_task->text(0);
     test_res *= w.m_taskList->task_list->topLevelItemCount() == 1;
-
     tests.push_back(test("Add Item Test One: ", test_res));
-
     //Check save and load from file...
     w.m_taskList->saveToFile();
     w.m_taskList->loadFromFile();
