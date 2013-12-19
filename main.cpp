@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    Tester m_test;
-    m_test.test_me(w);
+    //Tester m_test;
+    //m_test.test_me(w);
 
     return a.exec();
 }

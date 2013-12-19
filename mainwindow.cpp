@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     m_taskList = new TaskList(ui->taskList);
+    m_taskList->loadFromFile();
     m_combobox = new QComboBox(ui->taskList);
     m_timer = new QTimer();
     m_begin_work = false;
@@ -75,18 +76,20 @@ void MainWindow::UpdateCounter()
     QTime time = QTime::QTime::currentTime();
     QString text;
     if(m_taskList->top_task != NULL && m_begin_work)
+    {
+        m_taskList->top_task->addWorkTime(1);
         text = QDateTime::fromTime_t(m_taskList->top_task->time_worked).toString("mm:ss");
+        m_taskList->top_task->setText(2, m_taskList->top_task->workedToString());
+        TimeWorked->setText(1,((Task*)m_taskList->task_list->currentItem())->workedToString());
+    }
     else
         text = QDateTime::fromTime_t(0).toString("mm:ss");
     if ((time.second() % 2) == 0)
         text[2] = ' ';
     ui->lcdNumber->display(text);
-    if(m_taskList->top_task != NULL && m_begin_work)
+    if(m_taskList->top_task != NULL)
     {
-        m_taskList->top_task->addWorkTime(1);
-        m_taskList->top_task->setText(2, m_taskList->top_task->workedToString());
         m_taskList->top_task->colorRow(Qt::red,2);
-        TimeWorked->setText(1,m_taskList->top_task->workedToString());
     }
 }
 
@@ -135,6 +138,8 @@ void MainWindow::TaskListItemChanged()
 
         m_currentTask = m_task;
     }
+
+    m_taskList->saveToFile();
 }
 
 void MainWindow::DateUpdated(QTreeWidgetItem *, int col)
@@ -159,6 +164,8 @@ void MainWindow::DateUpdated(QTreeWidgetItem *, int col)
         if(Pre_req->text(1) != "None")
             m_task->pre_task = ((Task*)ui->taskList->findItems(Pre_req->text(1),Qt::MatchCaseSensitive, 0).first());
     }
+
+    m_taskList->saveToFile();
 }
 
 void MainWindow::CreateTask()
@@ -170,17 +177,27 @@ void MainWindow::CreateTask()
     new_task->setText(2,new_task->workedToString());
 
     ui->taskList->insertTopLevelItem(0,new_task);
+
+    m_taskList->task_list->resizeColumnToContents(0);
+    m_taskList->task_list->resizeColumnToContents(1);
+    m_taskList->task_list->resizeColumnToContents(2);
+
+    m_taskList->saveToFile();
 }
 
 void MainWindow::DeleteTask()
 {
     if( ui->taskList->currentIndex().row() >= 0)
         ui->taskList->takeTopLevelItem(ui->taskList->currentIndex().row());
+
+    m_taskList->saveToFile();
 }
 
 void MainWindow::DescriptionChanged()
 {
     ((Task*)ui->taskList->currentItem())->description = ui->description->toPlainText();
+
+    m_taskList->saveToFile();
 }
 
 void MainWindow::ComboBoxChange()
@@ -192,6 +209,8 @@ void MainWindow::ComboBoxChange()
         m_task->colorRow(Qt::cyan, 2);
     else
        m_task->colorRow(Qt::transparent, 2);
+
+    m_taskList->saveToFile();
 }
 
 void MainWindow::MoveDown()
@@ -203,6 +222,7 @@ void MainWindow::MoveDown()
         ui->taskList->insertTopLevelItem(old_row + 1, task);
         ui->taskList->setCurrentItem(task);
     }
+    m_taskList->saveToFile();
 }
 
 void MainWindow::MoveUp()
@@ -214,6 +234,7 @@ void MainWindow::MoveUp()
         ui->taskList->insertTopLevelItem(old_row - 1, task);
         ui->taskList->setCurrentItem(task);
     }
+    m_taskList->saveToFile();
 }
 
 void MainWindow::MakeTop()
@@ -235,6 +256,7 @@ void MainWindow::StopTimer()
     {
         m_begin_work = false;
     }
+    m_taskList->saveToFile();
 }
 
 MainWindow::~MainWindow()
