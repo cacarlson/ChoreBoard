@@ -138,6 +138,31 @@ void MainWindow::TaskListItemChanged()
 
         m_currentTask = m_task;
     }
+    else
+    {
+        Name->setText(1,  "");
+
+        DueDate->setText(0, "Due Date:");
+        DueDate->setText(1, "");
+
+        Project->setText(0, "Project:");
+        Project->setText(1, "");
+
+        TimeEst->setText(0, "Time Est.");
+        TimeEst->setText(1, "");
+
+        TimeWorked->setText(0, "Time Worked:");
+        TimeWorked->setText(1,"");
+
+        Pre_req->setText(0, "Pre-Req:");
+
+        Pre_req->setText(1, "");
+
+        Archived->setText(0, "Archived:");
+
+        ui->description->setPlainText("");
+
+    }
 
     m_taskList->saveToFile();
 }
@@ -190,12 +215,16 @@ void MainWindow::DeleteTask()
     if( ui->taskList->currentIndex().row() >= 0 && ui->taskList->currentItem() != m_taskList->top_task)
         ui->taskList->takeTopLevelItem(ui->taskList->currentIndex().row());
 
+    //TaskListItemChanged();
     m_taskList->saveToFile();
 }
 
 void MainWindow::DescriptionChanged()
 {
-    ((Task*)ui->taskList->currentItem())->description = ui->description->toPlainText();
+    if((Task*)ui->taskList->currentItem() != NULL)
+    {
+        ((Task*)ui->taskList->currentItem())->description = ui->description->toPlainText();
+    }
 
     m_taskList->saveToFile();
 }
@@ -203,12 +232,15 @@ void MainWindow::DescriptionChanged()
 void MainWindow::ComboBoxChange()
 {
     Task* m_task = (Task*)ui->taskList->currentItem();
-    m_task->archived = !m_combobox->currentIndex();
+    if(m_task != NULL)
+    {
+        m_task->archived = !m_combobox->currentIndex();
 
-    if(m_task->archived)
-        m_task->colorRow(Qt::cyan, 2);
-    else
-       m_task->colorRow(Qt::transparent, 2);
+        if(m_task->archived)
+            m_task->colorRow(Qt::cyan, 2);
+        else
+           m_task->colorRow(Qt::transparent, 2);
+    }
 
     m_taskList->saveToFile();
 }
